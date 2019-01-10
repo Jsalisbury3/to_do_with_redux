@@ -11,7 +11,7 @@ class AddItem extends Component {
                 <h1 className="center">Add Item</h1>
                 <NavButton color="deep-orange black-text"to="/">Back To List</NavButton>
 
-                <AddItemForm/>
+                <AddItemForm history={this.props.history}/>
             </div>
         );
     }

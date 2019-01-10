@@ -1,27 +1,29 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
 import { Field, reduxForm } from 'redux-form';
+import {addNewItem} from '../../actions';
 
 class AddItemForm extends Component {
     renderInput(props){
-        console.log('Render input Args:', props);
         return(
             <div className={`col ${props.size || 's12'}`}>
                 <div className="input-field">
-                    <input {...props.input} type="text"/>
-                    <label> {props.label} </label>
+                    <input {...props.input} id={props.id} type="text"/>
+                    <label htmlFor={props.id}> {props.label} </label>
                 </div>
                 <p className="red-text text-darken-2">{props.meta.touched && props.meta.error}</p>
             </div>
         )
     }
+    handleAddItem=async(values)=>{
+        this.props.addNewItem(values);
+        // this.props.reset();
+        await this.props.history.push('/');
 
-    handleAddItem=(values)=>{
-        console.log("Add item form values", values)
 
-        this.props.reset();
     }
     render(){
-        console.log('Add Item Form Props:', this.props)
         const {handleSubmit, reset} = this.props;
         return(
             <form onSubmit={handleSubmit(this.handleAddItem)}>               
@@ -44,7 +46,6 @@ class AddItemForm extends Component {
         )
     }
 }
-
 function validateForm(values){
     const {title, details} = values;
     const errors = {};
@@ -59,12 +60,26 @@ function validateForm(values){
 
     return errors;
 }
+function mapStateToProps(state, props){
+    return {
+        initialValues: {
+            title: "This is your title"
+        }
+    }
+}
+
+AddItemForm = connect(mapStateToProps, {
+    addNewItem: addNewItem
+})(withRouter(AddItemForm));
+
 
 export default reduxForm({
     form: 'add-item-form',
     validate: validateForm,
-    initialValues: {
-        title: 'This is the title',
-        details: 'Enter details here'
-    }
+    enableReinitialize: true,
+    // initialValues: {
+    //     title: 'This is the title',
+    //     details: 'Enter details here'
+    // }
+
 })(AddItemForm);
