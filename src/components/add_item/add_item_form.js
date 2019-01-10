@@ -25,6 +25,7 @@ class AddItemForm extends Component {
     }
     render(){
         const {handleSubmit, reset} = this.props;
+        console.log("hi")
         return(
             <form onSubmit={handleSubmit(this.handleAddItem)}>               
                 <div className="row">
